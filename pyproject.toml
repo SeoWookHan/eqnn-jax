@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "eqnn_jax" # 프로젝트 이름 (원하는 대로 수정 가능)
+version = "0.1.0"
+description = "Robot arm control policy using E3NN and JAX"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "jax[cuda12]",
+    "flax",
+    "jraph",
+    "e3nn-jax",
+    "optax",
+    "chex",
+    "ml_collections", # Scenic 코드 등에서 자주 쓰임
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-xdist",
+]
+
+[tool.hatch.build.targets.wheel]
+# 💡 핵심: 최상단에 있는 패키지 폴더들을 명시합니다.
+packages = ["eqnn_jax", "models", "benchmarks"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "-v"
+
+# JAX 가속을 위한 설정 (선택 사항)
+[tool.uv]
+dev-dependencies = ["pytest"]
